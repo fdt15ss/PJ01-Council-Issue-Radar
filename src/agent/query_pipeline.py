@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]  # 제출 폴더 루트
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import external_followup as FU  # noqa: E402

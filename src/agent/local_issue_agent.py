@@ -237,7 +237,7 @@ class LocalCouncilAgent:
     issue_payload: dict[str, Any]
     search_service: Any | None = None
     ollama_url: str = "http://127.0.0.1:11434"
-    model: str = "qwen3:8b"
+    model: str = "hf.co/mykor/A.X-4.0-Light-gguf:Q4_K_M"
     timeout_seconds: int = 180
     pipeline: Any | None = None          # agent.query_pipeline.QuestionPipeline
     parser_model: str | None = None      # 질문 해석용 모델 (없으면 model과 같음)

@@ -14,6 +14,7 @@ from urllib.parse import urlsplit
 from urllib.request import urlopen
 
 SRC_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = SRC_ROOT.parent  # 제출 폴더 루트 (.env, data/, logs/)
 LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
 
@@ -111,13 +112,13 @@ def ensure_ollama(
             if not any(value.split("/", 1)[0] == "OLLAMA_HOST" for value in shared):
                 shared.append("OLLAMA_HOST")
             env_for_ollama["WSLENV"] = ":".join(value for value in shared if value)
-    log_dir = SRC_ROOT / "logs"
+    log_dir = PROJECT_ROOT / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / "ollama.log"
     try:
         with log_path.open("a", encoding="utf-8") as log_file:
             options: dict[str, Any] = {
-                "cwd": str(SRC_ROOT),
+                "cwd": str(PROJECT_ROOT),
                 "env": env_for_ollama,
                 "stdout": log_file,
                 "stderr": subprocess.STDOUT,
@@ -164,11 +165,11 @@ def validate_api_prerequisites() -> None:
 
 def main() -> None:
     try:
-        os.chdir(SRC_ROOT)
+        os.chdir(PROJECT_ROOT)
         if str(SRC_ROOT) not in sys.path:
             sys.path.insert(0, str(SRC_ROOT))
 
-        loaded = load_env_file(SRC_ROOT / ".env")
+        loaded = load_env_file(PROJECT_ROOT / ".env")
         print(f"프로젝트 설정 로드 완료 (.env 항목 {loaded}개).")
         ollama_ready = ensure_ollama()
         if _auto_ollama_enabled(os.environ) and not ollama_ready:

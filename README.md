@@ -234,6 +234,15 @@ bash scripts/run_representative_issues.sh candidates   # 대표 이슈 후보
 bash scripts/run_forecast_evaluation.sh       # 예측 학습·평가
 ```
 
+### 3.5 LLM 추론 벤치마크 — NPU(RNGD)·GPU (선택)
+
+RAG 답변·질문 해석 프롬프트(입력 약 3,300~4,200토큰)로 RNGD(furiosa-llm, Qwen3-8B-FP8)와 GPU(Ollama, qwen3:8b)의 TTFT·생성 속도·처리량을 같은 코드로 측정합니다. 각 머신의 localhost에서만 호출하며, 실행 방법과 지표는 [benchmarks/README.md](benchmarks/README.md)에 있습니다.
+
+```bash
+python scripts/benchmark_llm_backends.py --dry-run
+python scripts/compare_benchmark_results.py --baseline home-ollama-qwen3-8b --label rngd-vs-home
+```
+
 ---
 
 ## 4. 주요 결과

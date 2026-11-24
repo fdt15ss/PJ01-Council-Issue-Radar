@@ -27,5 +27,6 @@ __pycache__/
 .ipynb_checkpoints/
 /.vscode
 /demo/**
+.env.furi
 # LLM 벤치마크 로컬 설정
 benchmarks/backends.toml

@@ -13,12 +13,15 @@
 - 회의록 원문은 **외부 AI API로 전송하지 않습니다.** 모든 모델은 로컬(GPU, Ollama)에서 실행합니다.
 - 날짜·순서·예측 수치는 데이터와 통계 모델이 계산하고, LLM은 검색된 근거를 문장으로 설명하는 역할만 맡습니다.
 
+> 💡 **웹 포트폴리오 빠른 열람:** 별도 서버 구동 없이 [`의정이슈레이더_포트폴리오/포트폴리오.html`](의정이슈레이더_포트폴리오/포트폴리오.html)을 웹 브라우저에서 더블클릭하면 전체 아키텍처, 실측 벤치마크, 핵심 시행착오 3선, 실제 대시보드 화면을 인터랙티브하게 확인하실 수 있습니다. (상세 안내: [포트폴리오 구동 가이드](의정이슈레이더_포트폴리오/포트폴리오_구동가이드.md))
+
 ---
 
 ## 1. 결과물 구성
 
 ```
 ├── README.md                  본 문서
+├── 의정이슈레이더_포트폴리오/   웹 브라우저 즉시 열람 인터랙티브 포트폴리오 (포트폴리오.html, 구동가이드, 에셋)
 ├── requirements.txt           pip 고정 버전 (pip freeze 기반)
 ├── environment.yml            conda 환경 (conda env export + requirements.txt)
 ├── docker-compose.yml         PostgreSQL 17 + pgvector 0.8.7
@@ -232,6 +235,15 @@ python src/16_load_pgvector.py                # pgvector 적재
 bash scripts/build_bm25_hybrid.sh             # BM25 색인
 bash scripts/run_representative_issues.sh candidates   # 대표 이슈 후보
 bash scripts/run_forecast_evaluation.sh       # 예측 학습·평가
+```
+
+### 3.5 LLM 추론 벤치마크 — NPU(RNGD)·GPU (선택)
+
+RAG 답변·질문 해석 프롬프트(입력 약 3,300~4,200토큰)로 RNGD(furiosa-llm, Qwen3-8B-FP8)와 GPU(Ollama, qwen3:8b)의 TTFT·생성 속도·처리량을 같은 코드로 측정합니다. 각 머신의 localhost에서만 호출하며, 실행 방법과 지표는 [benchmarks/README.md](benchmarks/README.md)에 있습니다.
+
+```bash
+python scripts/benchmark_llm_backends.py --dry-run
+python scripts/compare_benchmark_results.py --baseline home-ollama-qwen3-8b --label rngd-vs-home
 ```
 
 ---
